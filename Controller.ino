@@ -28,8 +28,8 @@ void setup()
   
   
   
-  while(!Serial){/*wait for connection*/}
   Serial.begin(57600);
+  while(!Serial){/*wait for connection*/}
   
  }
  
@@ -61,11 +61,8 @@ void loop()
     }
     else
     {
-      if(Message::Compare(command,"END"))
-      {
-        DONE = false;
-        runAll();
-      } 
+      DONE = false;
+      runAll();
       if(DONE)
       {
         Serial.println("DONE");
@@ -79,8 +76,7 @@ void loop()
   }
 
       
-  free(command);
-  command = NULL;
+
 }
 
 /*<<<<<<<<<<<<INIT THE CONTROLLER>>>>>>>>>>*/

@@ -20,17 +20,18 @@ void Message::Copy(const char* from, char* to)
 }
 
 char* Message::Addc(char c, const char* to)
-{   
+{
   int len = Count(to);
-  
-  char* result = (char*)malloc((len+1)*sizeof(char));
-  
-  Copy(to,result); 
+
+  char* result = (char*)malloc((len+2)*sizeof(char));
+
+  Copy(to,result);
   result[len] = c;
-  result[len+1] = '\0';  
+  result[len+1] = '\0';
   return result;
 }
 
+// Optional: alternative to rcvCommand() in HardByte.h for serial reading
 char* Message::GetMessage()
 {
   char* buff = NULL;
@@ -41,19 +42,22 @@ char* Message::GetMessage()
   {
     c = Serial.read();
     if(c == start)
-      Reading = true; 
+      Reading = true;
     if(c == final)
     {
        Reading = false;
-       NewCommand = true; 
+       NewCommand = true;
        return buff;
-    }  
-    if(Reading)    
-      buff = Addc(c,buff);
-        
+    }
+    if(Reading)
+    {
+      char* old = buff;
+      buff = Addc(c, buff);
+      free(old);
+    }
   }
- Reading = false; 
- return buff;
+  Reading = false;
+  return buff;
 }
 
 uint8_t* Message::IntToBytes(long iNumber)
@@ -70,7 +74,7 @@ long Message::BytesToInt(uint8_t* Ibytes)
 {
     long value = 0;
     
-    for(int i = sizeof(long); i >=0 ; i--)
+    for(int i = sizeof(long) - 1; i >= 0; i--)
         value +=  Ibytes[i] << i*8; 
         
     return value;

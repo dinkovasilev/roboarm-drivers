@@ -40,7 +40,7 @@ void Motor::setCommand(char* msg)
     return;
 
   counter -= 2;
-  char comsteps[counter]; 
+  char comsteps[counter + 1];
   
   for(int i = 0; i < counter; i++)
     comsteps[i] = msg[i+1];
@@ -270,19 +270,7 @@ void Motor::executeStep()
             else if(steps < 0)
               dir = CW;
             break; 
-    case 30:
-            if(steps < 0)
-              dir = CW; 
-            else if(steps > 0)
-              dir = CCW;
-            break; 
     case 4:
-            if(steps > 0)
-              dir = CCW; 
-            else if(steps < 0)
-              dir = CW;
-            break;
-    case 50:
             if(steps > 0)
               dir = CCW; 
             else if(steps < 0)
